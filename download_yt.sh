@@ -11,6 +11,10 @@ if ! command -v yt-dlp &> /dev/null; then
     exit 1
 fi
 
+if ! command -v ffmpeg &> /dev/null; then
+    echo -e "${YELLOW}⚠️ ffmpeg is not installed. Some features (like embedding chapters/subs) may not work. (Run: sudo pacman -S ffmpeg)${NC}"
+fi
+
 if [ $# -ge 1 ]; then
     url="$1"
 else
@@ -26,7 +30,7 @@ if [ -z "$url" ]; then
     exit 1
 fi
 
-dl_args=""
+dl_args=()
 
 echo -e "${YELLOW}⏳ Fetching video formats...${NC}"
 
@@ -37,7 +41,7 @@ read -rp "> " format_code
 if [ -z "$format_code" ]; then
     format_code="bestvideo+bestaudio/best"
 fi
-dl_args="-f $format_code"
+dl_args+=("-f" "$format_code")
 
 echo -e "${BLUE}📝 Do you want to download subtitles? (y/n):${NC}"
 read -rp "> " want_subs
@@ -50,9 +54,9 @@ if [[ "$want_subs" == "y" || "$want_subs" == "Y" ]]; then
     read -rp "> " sub_lang
     
     if [ "$sub_lang" == "all" ]; then
-        dl_args="$dl_args --write-sub --write-auto-sub --all-subs --embed-subs"
+        dl_args+=("--write-sub" "--write-auto-sub" "--all-subs" "--embed-subs")
     elif [ -n "$sub_lang" ]; then
-        dl_args="$dl_args --write-sub --write-auto-sub --sub-lang $sub_lang --embed-subs"
+        dl_args+=("--write-sub" "--write-auto-sub" "--sub-lang" "$sub_lang" "--embed-subs")
     fi
 fi
 
@@ -60,10 +64,39 @@ echo -e "${BLUE}🖼️ Do you want to download the thumbnail? (y/n):${NC}"
 read -rp "> " want_thumb
 
 if [[ "$want_thumb" == "y" || "$want_thumb" == "Y" ]]; then
-    dl_args="$dl_args --write-thumbnail --convert-thumbnails jpg"
+    dl_args+=("--write-thumbnail" "--convert-thumbnails" "jpg")
 fi
+
+echo -e "${BLUE}📑 Do you want to embed chapters into the video? (y/n):${NC}"
+read -rp "> " want_chapters
+if [[ "$want_chapters" == "y" || "$want_chapters" == "Y" ]]; then
+    dl_args+=("--embed-chapters")
+fi
+
+echo -e "${BLUE}✂️ Do you want to split the video into separate files based on chapters? (y/n):${NC}"
+read -rp "> " split_chapters
+if [[ "$split_chapters" == "y" || "$split_chapters" == "Y" ]]; then
+    dl_args+=("--split-chapters")
+fi
+
+echo -e "${BLUE}📄 Do you want to save video info (description, likes, views) to a txt file? (y/n):${NC}"
+read -rp "> " want_info
+if [[ "$want_info" == "y" || "$want_info" == "Y" ]]; then
+    dl_args+=("--print-to-file" "Title: %(title)s
+Channel: %(uploader)s
+Upload Date: %(upload_date)s
+Views: %(view_count)s
+Likes: %(like_count)s
+
+=========================
+Description:
+%(description)s" "%(title)s_info.txt")
+fi
+
 echo -e "${YELLOW}⏳ Starting download...${NC}"
-yt-dlp $dl_args "$url"
+
+yt-dlp "${dl_args[@]}" "$url"
+
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}✅ Download completed successfully!${NC}"
 else
