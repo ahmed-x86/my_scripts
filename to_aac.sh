@@ -1,39 +1,46 @@
 #!/bin/bash
 
-# Check if ffmpeg is installed
+RED='\033[38;2;243;139;168m'
+GREEN='\033[38;2;166;227;161m'
+BLUE='\033[38;2;137;180;250m'
+YELLOW='\033[38;2;249;226;175m'
+NC='\033[0m'
+
 if ! command -v ffmpeg &> /dev/null; then
-    echo "❌ ffmpeg is not installed"
+    echo -e "${RED}❌ ffmpeg is not installed${NC}"
     exit 1
 fi
 
-# Ask for input file path
-read -rp "🎵 Enter the path of the file to convert to AAC: " input_file
+if [ $# -ge 1 ]; then
+    input_file="$1"
+else
+    echo -e "${BLUE}🎵 Please enter the file path enclosed in quotes \" \":${NC}"
+    read -rp "> " input_file
+    
+    input_file="${input_file%\"}"
+    input_file="${input_file#\"}"
+    input_file="${input_file%\'}"
+    input_file="${input_file#\'}"
+fi
 
-# Check if the file exists
 if [ ! -f "$input_file" ]; then
-    echo "❌ File does not exist"
+    echo -e "${RED}❌ File does not exist: $input_file${NC}"
     exit 1
 fi
 
-# Extract filename without extension
+
 filename=$(basename -- "$input_file")
 name="${filename%.*}"
 
-# Output file name
-# Note: .m4a is the standard container for AAC audio. 
-# If you strictly need raw .aac extension, change m4a to aac below.
+
 output_file="${name}.m4a"
 
-# Convert to AAC
-# -vn         : Disable video (Audio only)
-# -c:a aac    : Use the Native FFmpeg AAC encoder
-# -b:a 192k   : Set audio bitrate to 192k (High Quality)
-echo "⏳ Converting to AAC..."
-ffmpeg -i "$input_file" -vn -c:a aac -b:a 192k "$output_file"
+echo -e "${YELLOW}⏳ Converting to AAC...${NC}"
 
-# Check conversion status
+ffmpeg -hide_banner -loglevel error -stats -i "$input_file" -vn -c:a aac -b:a 192k "$output_file"
+
 if [ $? -eq 0 ]; then
-    echo "✅ Conversion completed successfully: $output_file"
+    echo -e "${GREEN}✅ Conversion completed successfully: $output_file${NC}"
 else
-    echo "❌ Conversion failed"
+    echo -e "${RED}❌ Conversion failed${NC}"
 fi
