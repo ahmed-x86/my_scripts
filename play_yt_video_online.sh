@@ -31,6 +31,65 @@ if [ -z "$url" ]; then
     exit 1
 fi
 
+options=()
+hwdec_args=()
+
+options+=("CPU (Software Decoding)")
+hwdec_args+=("no")
+
+if lspci | grep -iE 'vga|3d|display' | grep -iq intel; then
+    options+=("Intel GPU")
+    hwdec_args+=("vaapi")
+fi
+
+if lspci | grep -iE 'vga|3d|display' | grep -iq amd; then
+    options+=("AMD GPU")
+    hwdec_args+=("vaapi")
+fi
+
+if lspci | grep -iE 'vga|3d|display' | grep -iq nvidia; then
+    if command -v nvidia-smi &> /dev/null; then
+        major_cc=$(nvidia-smi --query-gpu=compute_cap --format=csv,noheader | awk -F'.' '{print $1}' | head -n 1)
+        if [ -n "$major_cc" ] && [ "$major_cc" -lt 6 ]; then
+            options+=("Nvidia GPU (Old Cards)")
+            hwdec_args+=("vdpau")
+        else
+            options+=("Nvidia GPU (Modern Cards)")
+            hwdec_args+=("nvdec")
+        fi
+    else
+        options+=("Nvidia GPU")
+        hwdec_args+=("nvdec")
+    fi
+fi
+
+if lsmod | grep -iq nouveau; then
+    options+=("Nvidia Open Source Driver (Nouveau)")
+    hwdec_args+=("vaapi")
+fi
+
+echo -e "${BLUE}🖥️  Select Decoding Device:${NC}"
+for i in "${!options[@]}"; do
+    echo -e "${YELLOW}$((i+1)). ${options[$i]}${NC}"
+done
+
+read -rp "> " hw_choice
+
+if ! [[ "$hw_choice" =~ ^[0-9]+$ ]] || [ "$hw_choice" -lt 1 ] || [ "$hw_choice" -gt "${#options[@]}" ]; then
+    echo -e "${RED}❌ Invalid selection. Defaulting to CPU.${NC}"
+    hw_arg="no"
+    selected_name="CPU"
+else
+    index=$((hw_choice-1))
+    hw_arg="${hwdec_args[$index]}"
+    selected_name="${options[$index]}"
+fi
+
+extra_mpv_args=""
+if [[ "$selected_name" == "Intel GPU" ]]; then
+    extra_mpv_args="--vo=gpu --gpu-context=wayland"
+fi
+
 echo -e "${BLUE}📊 Do you want to select video quality manually? (y/n):${NC}"
 read -rp "> " manual_quality
 
@@ -42,13 +101,13 @@ if [[ "$manual_quality" == "y" || "$manual_quality" == "Y" ]]; then
     read -rp "> " format_code
     
     if [ -n "$format_code" ]; then
-        echo -e "${YELLOW}🍿 Streaming video in mpv (Format: $format_code)...${NC}"
-        mpv --ytdl-format="$format_code" "$url"
+        echo -e "${GREEN}🍿 Streaming video via ${selected_name} (Format: $format_code)...${NC}"
+        mpv --hwdec="$hw_arg" $extra_mpv_args --ytdl-format="$format_code" "$url"
     else
-        echo -e "${YELLOW}🍿 Streaming video in mpv (Best Quality)...${NC}"
-        mpv "$url"
+        echo -e "${GREEN}🍿 Streaming video via ${selected_name} (Best Quality)...${NC}"
+        mpv --hwdec="$hw_arg" $extra_mpv_args "$url"
     fi
 else
-    echo -e "${YELLOW}🍿 Streaming video in mpv (Best Quality)...${NC}"
-    mpv "$url"
+    echo -e "${GREEN}🍿 Streaming video via ${selected_name} (Best Quality)...${NC}"
+    mpv --hwdec="$hw_arg" $extra_mpv_args "$url"
 fi
