@@ -5,7 +5,7 @@ A collection of vanilla Bash scripts for efficient media conversion using FFmpeg
 ## Features
 - **Catppuccin Mocha** themed CLI output.
 - **Dynamic Input**: Accepts file paths as arguments or prompts for them.
-- **Hardware Acceleration**: Uses CUDA for decoding and scaling to speed up heavy conversions.
+- **Hardware Acceleration**: Uses NVIDIA NVDEC and CUDA pipelines to speed up heavy conversions.
 - **Professional Formats**: Scripts for DaVinci Resolve, WebM, MP4, and high-quality Audio.
 
 ## Scripts Overview
@@ -14,8 +14,18 @@ A collection of vanilla Bash scripts for efficient media conversion using FFmpeg
 - `to_mp4.sh`: Standard H.264/AAC MP4 conversion.
 - `to_mkv.sh`: High-quality MKV container conversion.
 - `to_webm.sh`: VP9/Opus conversion for web usage.
-- `to_davinci.sh`: Converts video to DNxHR (MOV) for DaVinci Resolve (CPU based).
-- `to_davinci_cuda.sh`: Uses **CUDA** to accelerate decoding and pixel format conversion for DaVinci Resolve.
+- `to_davinci.sh`: Converts video to DNxHR (MOV) for DaVinci Resolve (Pure CPU).
+
+### 🚀 DaVinci Resolve & Hardware Acceleration
+Because DaVinci Resolve on Linux has specific format requirements, this repository provides two distinct hardware-accelerated scripts for **NVIDIA GPUs**:
+
+1. **`to-davinci_by-cuda.sh` (Basic NVDEC Decoding)**
+   - **Compatibility:** Works on almost **all NVIDIA GPUs** (GeForce, Quadro, etc.) that feature a hardware video decoder (NVDEC).
+   - **Mechanism:** Uses the GPU only to decode the input video (`-hwaccel cuda`). The color space conversion and encoding are offloaded back to the CPU.
+
+2. **`to_davinci_cuda_full.sh` (Full CUDA Pipeline)**
+   - **Compatibility:** Strictly for **NVIDIA CUDA-enabled GPUs**. It will **NOT** work on AMD or Intel GPUs. It requires the `cuda` toolkit installed on your system and an FFmpeg build compiled with CUDA filters support (e.g., `--enable-cuda-llvm`).
+   - **Mechanism:** Keeps the decoded frames entirely within the GPU's VRAM (`-hwaccel_output_format cuda`). It utilizes the CUDA compute cores to perform the heavy YUV422p color space conversion (`scale_cuda`), minimizing CPU overhead to the absolute minimum before the final CPU-based DNxHR encoding.
 
 ### 🎵 Audio Conversion
 - `to_aac.sh`: Converts audio to high-quality AAC (M4A).
@@ -33,12 +43,4 @@ A collection of vanilla Bash scripts for efficient media conversion using FFmpeg
    ```bash
    ./to_mp4.sh
    ```
-
-## CUDA Acceleration
-The `to_davinci_cuda.sh` script leverages NVIDIA's CUDA cores to handle decoding and color space conversion (`yuv422p`). This reduces the load on the CPU and speeds up the preparation of files for editing in DaVinci Resolve.
-
-### Requirements
-- NVIDIA GPU with proprietary drivers.
-- FFmpeg built with `--enable-cuda-llvm` and `--enable-nvdec`.
-- `cuda` toolkit installed on the system.
 
