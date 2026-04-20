@@ -9,6 +9,7 @@ NC='\033[0m'
 if ! command -v yt-dlp &> /dev/null; then
     echo -e "${RED}❌ yt-dlp is not installed.${NC}"
     echo -e "${RED}❌ (Ach: sudo pacman -S yt-dlp)${NC}"
+    echo -e "${RED}❌ (debian: sudo apt install yt-dlp)${NC}"
     exit 1
 fi
 
