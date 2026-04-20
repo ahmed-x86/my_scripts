@@ -1,40 +1,43 @@
 #!/bin/bash
 
-# Check if ffmpeg is installed
+RED='\033[38;2;243;139;168m'
+GREEN='\033[38;2;166;227;161m'
+BLUE='\033[38;2;137;180;250m'
+YELLOW='\033[38;2;249;226;175m'
+NC='\033[0m'
+
 if ! command -v ffmpeg &> /dev/null; then
-    echo "❌ ffmpeg is not installed"
+    echo -e "${RED}❌ ffmpeg is not installed${NC}"
     exit 1
 fi
 
-# Ask for input file path
-read -rp "📂 Enter the path of the file to convert: " input_file
+if [ $# -ge 1 ]; then
+    input_file="$1"
+else
+    echo -e "${BLUE}📂 Please enter the file path enclosed in quotes \" \":${NC}"
+    read -rp "> " input_file
+    
+    input_file="${input_file%\"}"
+    input_file="${input_file#\"}"
+    input_file="${input_file%\'}"
+    input_file="${input_file#\'}"
+fi
 
-# Remove surrounding single or double quotes if present
-input_file="${input_file%\"}"
-input_file="${input_file#\"}"
-input_file="${input_file%\'}"
-input_file="${input_file#\'}"
-
-# Check if the file exists
 if [ ! -f "$input_file" ]; then
-    echo "❌ File does not exist"
+    echo -e "${RED}❌ File does not exist: $input_file${NC}"
     exit 1
 fi
 
-# Extract filename without extension
 filename=$(basename -- "$input_file")
 name="${filename%.*}"
-
-# Output file name
 output_file="${name}.mp4"
 
-# Convert to MP4
-echo "⏳ Converting..."
-ffmpeg -i "$input_file" -c:v libx264 -c:a aac -movflags +faststart "$output_file"
+echo -e "${YELLOW}⏳ Converting to MP4...${NC}"
 
-# Check conversion status
+ffmpeg -hide_banner -loglevel error -stats -i "$input_file" -c:v libx264 -c:a aac -movflags +faststart "$output_file"
+
 if [ $? -eq 0 ]; then
-    echo "✅ Conversion completed successfully: $output_file"
+    echo -e "${GREEN}✅ Conversion completed successfully: $output_file${NC}"
 else
-    echo "❌ Conversion failed"
+    echo -e "${RED}❌ Conversion failed${NC}"
 fi
