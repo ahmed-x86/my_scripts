@@ -32,11 +32,10 @@ filename=$(basename -- "$input_file")
 name="${filename%.*}"
 output_file="${name}.mkv"
 
-# تنبيه للمستخدم بنوع الكارت والحوسبة المستخدمة
+
 echo -e "${YELLOW}⏳ Converting to MKV using NVIDIA NVENC Hardware Acceleration...${NC}"
 
-# -hwaccel cuda: لفك التشفير بالكارت
-# -c:v h264_nvenc: للتشفير بالكارت
+
 ffmpeg -hwaccel cuda -hide_banner -loglevel error -stats -i "$input_file" -c:v h264_nvenc -c:a aac "$output_file"
 
 if [ $? -eq 0 ]; then
