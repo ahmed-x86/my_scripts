@@ -13,7 +13,7 @@ if [ $# -ge 1 ]; then
 else
     echo -e "${BLUE}✂️ Enter file path to cut:${NC}"
     read -rp "> " input_file
-    # إزالة علامات التنصيص إن وجدت
+
     input_file="${input_file%\"}"
     input_file="${input_file#\"}"
     input_file="${input_file%\'}"
