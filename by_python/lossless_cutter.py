@@ -6,7 +6,7 @@ import shutil
 import subprocess
 import re
 
-# Colors
+
 RED = '\033[38;2;243;139;168m'
 GREEN = '\033[38;2;166;227;161m'
 BLUE = '\033[38;2;137;180;250m'
@@ -57,7 +57,7 @@ def main():
 
     print(f"{YELLOW}⏳ Cutting file losslessly from [{start_time}] to [{end_time}]...{NC}")
 
-    # حساب مدة المقطع الجديد لكي يعمل شريط التقدم
+
     s_sec = time_to_seconds(start_time)
     e_sec = time_to_seconds(end_time)
     
@@ -65,7 +65,7 @@ def main():
     if s_sec is not None and e_sec is not None and e_sec > s_sec:
         duration = e_sec - s_sec
 
-    # تشغيل ffmpeg
+
     cmd = [
         "ffmpeg", "-y", 
         "-i", input_file,
@@ -79,7 +79,7 @@ def main():
 
     time_pattern = re.compile(r"time=(\d+):(\d+):(\d+\.\d+)")
     
-    # منطق شريط التقدم
+
     for line in process.stderr:
         if duration:
             match = time_pattern.search(line)
@@ -92,7 +92,7 @@ def main():
     process.wait()
     
     if duration:
-        print() # سطر جديد بعد انتهاء شريط التقدم
+        print() 
 
     if process.returncode == 0:
         print(f"{GREEN}✅ Successfully cut to: {output_file}{NC}")
