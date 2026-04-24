@@ -22,6 +22,7 @@ A collection of vanilla Bash scripts for efficient media conversion and download
 - `*_by_cuda.sh`: Hybrid scripts that use the GPU strictly for decoding (`-hwaccel cuda`) to reduce system load.
 ### 📼 play video
 - `play_local_video_by_ffplay` : this script for play local video in your device by ffplay
+- `play_yt_video_online` : this script for play video in youtube without ADs by url (by mpv)
 
 
 ### 🚀 DaVinci Resolve Specific
