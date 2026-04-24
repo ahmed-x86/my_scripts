@@ -23,7 +23,7 @@ A collection of vanilla Bash scripts for efficient media conversion and download
 ### 📼 play video
 - `play_local_video_by_ffplay` : this script for play local video in your device by ffplay
 - `play_yt_video_online` : this script for play video in youtube without ADs by url (by mpv)
-
+- `play_local_video.sh` : this script for play local video in your device by mpv
 
 ### 🚀 DaVinci Resolve Specific
 Because DaVinci Resolve on Linux has specific format requirements, this repository provides two distinct hardware-accelerated scripts for **NVIDIA GPUs**:
