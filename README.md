@@ -20,6 +20,7 @@ A collection of vanilla Bash scripts for efficient media conversion and download
 - `to_mp4_nvenc.sh` & `to_mkv_nvenc.sh`: Uses full NVIDIA hardware encoding (NVENC) for lightning-fast conversions.
 - `to_webm_nvenc.sh`: Smart encoding script. Automatically uses ultra-fast **AV1 NVENC** if supported (RTX 40-series+), otherwise falls back to a hybrid CUDA-decoding + CPU-encoding approach.
 - `*_by_cuda.sh`: Hybrid scripts that use the GPU strictly for decoding (`-hwaccel cuda`) to reduce system load.
+### 📼 play video
 
 ### 🚀 DaVinci Resolve Specific
 Because DaVinci Resolve on Linux has specific format requirements, this repository provides two distinct hardware-accelerated scripts for **NVIDIA GPUs**:
