@@ -21,8 +21,7 @@ A collection of vanilla Bash scripts for efficient media conversion and download
 - `to_webm_nvenc.sh`: Smart encoding script. Automatically uses ultra-fast **AV1 NVENC** if supported (RTX 40-series+), otherwise falls back to a hybrid CUDA-decoding + CPU-encoding approach.
 - `*_by_cuda.sh`: Hybrid scripts that use the GPU strictly for decoding (`-hwaccel cuda`) to reduce system load.
 ### 📼 play video
-- `play_local_video_by_ffplay` : this script for play local video in your device by mpv
-
+- `play_local_video_by_ffplay` : this script for play local video in your device by ffplay
 
 
 ### 🚀 DaVinci Resolve Specific
