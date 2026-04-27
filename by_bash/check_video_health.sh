@@ -33,7 +33,7 @@ if [ ! -f "$input_file" ]; then
     exit 1
 fi
 
-# إعداد ملف السجل
+
 log_file="corruption_report.txt"
 > "$log_file"
 
