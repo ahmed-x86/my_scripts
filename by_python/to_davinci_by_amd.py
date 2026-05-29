@@ -57,16 +57,15 @@ def main():
     name = os.path.splitext(filename)[0]
     output_file = f"{name}_davinci_amd.mov"
 
-    print(f"{YELLOW}⏳ Converting to DaVinci Resolve (DNxHR) with AMD VAAPI Decoding...{NC}")
+    print(f"{YELLOW}⏳ Converting to DaVinci Resolve (DNxHR) with AMD VA-API Decoding...{NC}")
     send_notification("Video Converter", f"Starting AMD-assisted conversion for {input_file}...", "video-x-generic")
 
     duration = get_duration(input_file)
     
-    # Run ffmpeg with VAAPI (AMD) decoding, DNxHD/HR, and uncompressed audio parameters
+    # Run ffmpeg with AMD VA-API decoding, DNxHD/HR, and uncompressed audio parameters
     # /dev/dri/renderD128 is the default path for the primary GPU on Linux
     cmd = [
-        "ffmpeg", "-y", 
-        "-hwaccel", "vaapi", "-hwaccel_device", "/dev/dri/renderD128", 
+        "ffmpeg", "-y", "-hwaccel", "vaapi", "-hwaccel_device", "/dev/dri/renderD128",
         "-i", input_file, 
         "-c:v", "dnxhd", "-profile:v", "dnxhr_sq", 
         "-pix_fmt", "yuv422p", "-c:a", "pcm_s16le", 
