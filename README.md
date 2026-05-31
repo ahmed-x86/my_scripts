@@ -46,7 +46,7 @@ Because DaVinci Resolve on Linux has specific format requirements, this reposito
 1. **Direct Argument**:
    ```bash
    ./to_mp4.sh "path/to/video.mkv"
-   ./download_yt.sh "[https://www.youtube.com/watch?v=](https://www.youtube.com/watch?v=)..."
+   ./download_yt.sh "https://www.youtube.com/watch?v=..."
    ```
 
 2. **Interactive Mode**:
