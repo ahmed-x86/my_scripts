@@ -1,0 +1,55 @@
+#!/bin/bash
+
+RED='\033[38;2;243;139;168m'
+GREEN='\033[38;2;166;227;161m'
+BLUE='\033[38;2;137;180;250m'
+YELLOW='\033[38;2;249;226;175m'
+NC='\033[0m'
+
+send_notification() {
+    local title="$1"
+    local message="$2"
+    local icon="$3"
+    if command -v notify-send &> /dev/null; then
+        notify-send "$title" "$message" -i "$icon" || true
+    fi
+}
+
+if ! command -v ffmpeg &> /dev/null; then
+    echo -e "${RED}❌ ffmpeg is not installed${NC}"
+    exit 1
+fi
+
+if [ $# -ge 1 ]; then
+    input_file="$1"
+else
+    echo -e "${BLUE}🎬 Please enter the file path enclosed in quotes \" \":${NC}"
+    read -rp "> " input_file
+    
+    input_file="${input_file%\"}"
+    input_file="${input_file#\"}"
+    input_file="${input_file%\'}"
+    input_file="${input_file#\'}"
+fi
+
+if [ ! -f "$input_file" ]; then
+    echo -e "${RED}❌ File does not exist: $input_file${NC}"
+    exit 1
+fi
+
+filename=$(basename -- "$input_file")
+name="${filename%.*}"
+output_file="${name}_prores_amd_full.mov"
+
+echo -e "${YELLOW}⏳ Processing with AMD VA-API Pipeline (ProRes 422)...${NC}"
+send_notification "Video Converter" "Starting full AMD pipeline for $input_file..." "video-x-generic"
+
+ffmpeg -y -hwaccel vaapi -hwaccel_device /dev/dri/renderD128 -hwaccel_output_format vaapi -hide_banner -loglevel error -stats -i "$input_file" -vf "hwdownload,format=nv12,format=yuv422p10le" -c:v prores_ks -profile:v 2 -vendor apl0 -bits_per_mb 8000 -c:a pcm_s16le "$output_file"
+
+if [ $? -eq 0 ]; then
+    echo -e "${GREEN}✅ Conversion completed successfully: $output_file${NC}"
+    send_notification "Success" "AMD Pipeline finished: $output_file" "dialog-information"
+else
+    echo -e "${RED}❌ Conversion failed${NC}"
+    send_notification "Error" "Conversion failed!" "dialog-error"
+fi
