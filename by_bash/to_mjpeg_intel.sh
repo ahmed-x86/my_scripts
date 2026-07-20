@@ -35,7 +35,7 @@ output_file="${name}_mjpeg_intel.mov"
 echo -e "${YELLOW}⏳ Processing with Intel Iris Xe (VA-API) Pipeline...${NC}"
 notify-send "Video Converter" "Starting Intel VA-API pipeline for $input_file..." -i video-x-generic
 
-# استخدام فك التشفير التسريعي عبر كارت إنتل VA-API
+
 ffmpeg -hwaccel vaapi -hwaccel_device /dev/dri/renderD128 -hide_banner -loglevel error -stats -i "$input_file" \
     -vcodec mjpeg -q:v 2 -acodec pcm_s16be -q:a 0 -f mov "$output_file"
 
