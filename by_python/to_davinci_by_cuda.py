@@ -162,3 +162,12 @@ def main():
     print() # Add a final newline when complete
 
     # Success or Failure
+    if process.returncode == 0:
+        print(f"{GREEN}✅ Conversion completed successfully: {output_file}{NC}")
+        send_notification("Video Converter", "Conversion completed successfully!", "video-x-generic")
+    else:
+        print(f"{RED}❌ Process failed{NC}")
+        send_notification("Video Converter", "Conversion failed!", "dialog-error")
+
+if __name__ == "__main__":
+    main()
