@@ -37,16 +37,23 @@ def main():
 
     dl_args = ["yt-dlp"]
 
-    print(f"{YELLOW}⏳ Fetching video formats...{NC}")
-    subprocess.run(["yt-dlp", "-F", url])
-    
-    print(f"{BLUE}📊 Enter the format code (e.g., 299+140 for 1080p60, or 'best'):{NC}")
-    format_code = input("> ").strip()
+    # Option to skip downloading the video itself
+    print(f"{BLUE}🎬 Do you want to download the video itself? (y/n):{NC}")
+    want_video = input("> ").strip().lower()
 
-    if not format_code:
-        format_code = "bestvideo+bestaudio/best"
-    
-    dl_args.extend(["-f", format_code])
+    if want_video == 'n':
+        dl_args.append("--skip-download")
+    else:
+        print(f"{YELLOW}⏳ Fetching video formats...{NC}")
+        subprocess.run(["yt-dlp", "-F", url])
+        
+        print(f"{BLUE}📊 Enter the format code (e.g., 299+140 for 1080p60, or 'best'):{NC}")
+        format_code = input("> ").strip()
+
+        if not format_code:
+            format_code = "bestvideo+bestaudio/best"
+        
+        dl_args.extend(["-f", format_code])
 
     print(f"{BLUE}📝 Do you want to download subtitles? (y/n):{NC}")
     want_subs = input("> ").strip().lower()
