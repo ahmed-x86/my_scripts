@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import os
 import sys
 import shutil
 import subprocess
@@ -28,7 +29,6 @@ def main():
         print(f"{BLUE}🔗 Please enter the YouTube URL enclosed in quotes \" \":{NC}")
         url = input("> ").strip()
         
-    # Clean quotes
     url = url.strip('"\'')
 
     if not url:
@@ -97,15 +97,31 @@ def main():
         )
         dl_args.extend(["--print-to-file", info_template, "%(title)s_info.txt"])
 
-    print(f"{YELLOW}⏳ Starting download...{NC}")
+    print(f"{BLUE}🍪 Do you want to use cookies for authentication? (y/n):{NC}")
+    want_cookies = input("> ").strip().lower()
+    
+    if want_cookies == 'y':
+        print(f"{BLUE}1) From a browser (e.g., zen, firefox, chrome)\n2) From a text file{NC}")
+        cookie_choice = input("> ").strip()
+        
+        if cookie_choice == '1':
+            print(f"{BLUE}🌐 Enter browser name (e.g., zen, firefox, chrome, brave, edge):{NC}")
+            browser = input("> ").strip().lower()
+            if browser:
+                dl_args.extend(["--cookies-from-browser", browser])
+        elif cookie_choice == '2':
+            print(f"{BLUE}📁 Enter the path to the cookies file:{NC}")
+            cookie_file = input("> ").strip().strip('"\'')
+            if os.path.isfile(cookie_file):
+                dl_args.extend(["--cookies", cookie_file])
+            else:
+                print(f"{RED}❌ File not found. Proceeding without cookies.{NC}")
 
-    # Add the URL as the final argument
+    print(f"{YELLOW}⏳ Starting download...{NC}")
     dl_args.append(url)
 
     try:
-        # Run yt-dlp and allow it to print its native progress bar directly to the terminal
         process = subprocess.run(dl_args)
-        
         if process.returncode == 0:
             print(f"{GREEN}✅ Download completed successfully!{NC}")
         else:
