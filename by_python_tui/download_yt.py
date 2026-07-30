@@ -363,7 +363,7 @@ def run_dashboard(stdscr, url):
                     custom = prompt_input(stdscr, "🔧 Enter language code (e.g. fr, de)")
                     if custom: state.update({'subs': custom, 'subs_label': custom})
 
-            # 3. Thumbnail Action
+            
             elif current_idx == 2:
                 state['thumb'] = not state['thumb']
             
