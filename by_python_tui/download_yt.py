@@ -375,7 +375,7 @@ def run_dashboard(stdscr, url):
                 elif choice == 1: state.update({'chapters': True, 'split': False})
                 elif choice == 2: state.update({'chapters': True, 'split': True})
 
-            # 5. Info Action
+            
             elif current_idx == 4:
                 state['info'] = not state['info']
 
