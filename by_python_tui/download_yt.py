@@ -17,9 +17,7 @@ LOGO = [
     "    ╚═╝      ╚═╝       ╚═════╝ ╚══════╝╚═╝     "
 ]
 
-# ---------------------------------------------------------
-# Dependency Check
-# ---------------------------------------------------------
+
 def check_dependencies():
     if not shutil.which("yt-dlp"):
         print("❌ yt-dlp is not installed. Please install it first.")
