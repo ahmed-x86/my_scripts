@@ -367,7 +367,7 @@ def run_dashboard(stdscr, url):
             elif current_idx == 2:
                 state['thumb'] = not state['thumb']
             
-            # 4. Chapters Action
+            
             elif current_idx == 3:
                 opts = [{"icon": "🚫", "label": "Skip"}, {"icon": "📑", "label": "Embed Only"}, {"icon": "✂️", "label": "Embed & Split"}]
                 choice = prompt_choice_scrollable(stdscr, opts, "📑 Chapters Config")
