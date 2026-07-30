@@ -391,7 +391,7 @@ def run_dashboard(stdscr, url):
                     c_file = prompt_input(stdscr, "📁 Enter absolute path to cookies.txt")
                     if c_file: state.update({'cookie_type': 'file', 'cookie_val': c_file})
 
-            # 7. Archive Action
+            
             elif current_idx == 6:
                 state['archive'] = not state['archive']
 
