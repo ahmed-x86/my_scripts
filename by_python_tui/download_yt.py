@@ -305,7 +305,7 @@ def run_dashboard(stdscr, url):
                                 abr_str = f"{int(abr)}kbps" if abr else ""
                                 a_opts.append({"icon": "🎵", "label": f"{abr_str} ({ext}) [{acodec}]".strip(), "id": fid})
                         
-                        # 1. Ask for Video Quality
+                        
                         v_choice = prompt_choice_scrollable(stdscr, v_opts, "🎬  Select Video Quality")
                         sel_v = v_opts[v_choice]
                         
