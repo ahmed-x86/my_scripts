@@ -313,7 +313,7 @@ def run_dashboard(stdscr, url):
                         a_choice = prompt_choice_scrollable(stdscr, a_opts, "🎵  Select Audio Quality")
                         sel_a = a_opts[a_choice]
                         
-                        # 3. Combine both choices
+                        
                         if sel_v['id'] == 'none' and sel_a['id'] == 'none':
                             state.update({'skip_video': True, 'format_label': 'Skip Completely', 'format': 'none'})
                         elif sel_v['id'] == 'none':
