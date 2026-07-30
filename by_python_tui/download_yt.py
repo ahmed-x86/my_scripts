@@ -395,7 +395,7 @@ def run_dashboard(stdscr, url):
             elif current_idx == 6:
                 state['archive'] = not state['archive']
 
-            # 8. Location Action
+            
             elif current_idx == 7:
                 opts = [
                     {"icon": "📍", "label": "Here (Current Directory)"},
