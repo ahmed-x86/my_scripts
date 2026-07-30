@@ -413,7 +413,7 @@ def run_dashboard(stdscr, url):
                     if custom_path:
                         state.update({'save_dir': custom_path, 'save_dir_label': custom_path})
 
-            # 9. START DOWNLOAD
+        
             elif current_idx == 8:
                 return state
 
