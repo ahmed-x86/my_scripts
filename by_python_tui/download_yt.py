@@ -79,9 +79,7 @@ def draw_logo(stdscr, start_y, max_x):
         stdscr.addstr(start_y + i, x, line, curses.color_pair(8) | curses.A_BOLD)
     return start_y + len(LOGO) + 2
 
-# ---------------------------------------------------------
-# UI Components
-# ---------------------------------------------------------
+
 def prompt_input(stdscr, title, default_text=""):
     curses.curs_set(1)
     input_str = default_text
