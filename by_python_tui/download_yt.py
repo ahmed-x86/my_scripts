@@ -288,7 +288,6 @@ def run_dashboard(stdscr, url):
                             {"icon": "🚫", "label": "Skip Audio", "id": "none"}
                         ]
                         
-                        # Separate Video and Audio formats
                         for f in cached_info['formats'][::-1]:
                             fid = str(f.get('format_id', ''))
                             ext = f.get('ext', '')
