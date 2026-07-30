@@ -176,9 +176,7 @@ def fetch_video_info(url, state):
     except Exception:
         return None
 
-# ---------------------------------------------------------
-# Main Dashboard Loop
-# ---------------------------------------------------------
+
 def run_dashboard(stdscr, url):
     state = {
         'format': 'bestvideo+bestaudio/best',
