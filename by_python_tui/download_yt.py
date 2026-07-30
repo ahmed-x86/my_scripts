@@ -418,9 +418,7 @@ def run_dashboard(stdscr, url):
             elif current_idx == 8:
                 return state
 
-# ---------------------------------------------------------
-# Download Execution UI
-# ---------------------------------------------------------
+
 def execute_download(stdscr, url, state):
     dl_args = ["yt-dlp", "--no-playlist", "--continue"]
     
