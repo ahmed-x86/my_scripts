@@ -379,7 +379,7 @@ def run_dashboard(stdscr, url):
             elif current_idx == 4:
                 state['info'] = not state['info']
 
-            # 6. Cookies Action
+            
             elif current_idx == 5:
                 opts = [{"icon": "🚫", "label": "Skip"}, {"icon": "🌐", "label": "Browser"}, {"icon": "📁", "label": "Text File"}]
                 choice = prompt_choice_scrollable(stdscr, opts, "🍪 Cookies Config")
