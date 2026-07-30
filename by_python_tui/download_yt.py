@@ -163,9 +163,7 @@ def show_loading(stdscr, msg=" ⏳ Fetching data from yt-dlp... "):
     except curses.error: pass
     stdscr.refresh()
 
-# ---------------------------------------------------------
-# Dynamic yt-dlp Fetching
-# ---------------------------------------------------------
+
 def fetch_video_info(url, state):
     cmd = ["yt-dlp", "-J", "--no-playlist", "--skip-download"]
     if state['cookie_type'] == 'browser': cmd.extend(["--cookies-from-browser", state['cookie_val']])
