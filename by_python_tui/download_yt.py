@@ -309,7 +309,7 @@ def run_dashboard(stdscr, url):
                         v_choice = prompt_choice_scrollable(stdscr, v_opts, "🎬  Select Video Quality")
                         sel_v = v_opts[v_choice]
                         
-                        # 2. Ask for Audio Quality
+                        
                         a_choice = prompt_choice_scrollable(stdscr, a_opts, "🎵  Select Audio Quality")
                         sel_a = a_opts[a_choice]
                         
