@@ -443,7 +443,7 @@ def execute_download(stdscr, url, state):
         
     if state['archive']: dl_args.extend(["--download-archive", "downloaded_archive.txt"])
     
-    # Save directory logic
+    
     if state['save_dir']:
         dl_args.extend(["-P", state['save_dir']])
         
