@@ -30,9 +30,7 @@ def check_dependencies():
         except KeyboardInterrupt:
             sys.exit(1)
 
-# ---------------------------------------------------------
-# TUI Colors Setup
-# ---------------------------------------------------------
+
 def setup_catppuccin_colors():
     curses.use_default_colors()
     try:
