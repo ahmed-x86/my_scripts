@@ -52,3 +52,5 @@ my_token.txt
 cookies.txt
 
 auto_commit.py
+
+__pycache__
