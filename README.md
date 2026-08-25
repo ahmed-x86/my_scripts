@@ -56,4 +56,4 @@ Because DaVinci Resolve on Linux has specific format requirements, this reposito
    ```
 
 ## License
-Licensed under the **GPL-3.0 License**. See the `LICENSE` file for details.
+Licensed under the **GPL-3.0 License**. See the [LICENSE](./LICENSE) file for details.
